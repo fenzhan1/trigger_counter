@@ -4,7 +4,7 @@
     "version": "1.2.0",
     "description": "自定义条目注入插件，支持启用开关、白名单/黑名单、注入位置、每条目独立监听目标，并在回复结束后由判定模型更新条目的值与状态。",
     "author": "MoFox Team",
-    "license": "GPL-3.0",
+    "license": "AGPL-3.0",
     "categories": [
         "prompt",
         "utility"
