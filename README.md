@@ -24,4 +24,4 @@ python -m pytest test/plugins/trigger_counter -p no:randomly -q -o addopts=""
 
 ## 许可证
 
-AGPL-3.0。
+GPL-3.0。
