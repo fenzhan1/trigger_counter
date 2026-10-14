@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any
 
 from src.app.plugin_system.api import llm_api
 from src.app.plugin_system.api.log_api import get_logger
-from src.app.plugin_system.types import LLMContextManager, LLMPayload, ROLE, Text
+from src.app.plugin_system.types import ROLE, LLMContextManager, LLMPayload, Text
 
 from .service import format_value
 
@@ -49,7 +49,7 @@ def extract_json_object(raw: str) -> dict[str, Any] | None:
     return parsed if isinstance(parsed, dict) else None
 
 
-def resolve_model_set(config: "TriggerCounterConfig") -> Any | None:
+def resolve_model_set(config: TriggerCounterConfig) -> Any | None:
     """按配置解析判定模型集，优先使用自选模型名。
 
     Args:
@@ -81,7 +81,7 @@ def resolve_model_set(config: "TriggerCounterConfig") -> Any | None:
 
 
 def build_judge_prompt(
-    entries: list["EntrySection"],
+    entries: list[EntrySection],
     records: dict[str, dict[str, Any]],
     reply_text: str,
     tool_summary: str = "",
@@ -100,8 +100,10 @@ def build_judge_prompt(
         完整提示词文本。
     """
     lines: list[str] = [
-        "你是一个严格的记录员。请根据本轮回复内容，判断每个条目的值应该如何变化，"
-        "并更新该条目的状态描述。",
+        (
+            "你是一个严格的记录员。请根据本轮回复内容，判断每个条目的值应该如何变化，"
+            "并更新该条目的状态描述。"
+        ),
         "",
         "条目清单：",
     ]
@@ -143,8 +145,10 @@ def build_judge_prompt(
             "- op=replace 表示把值直接替换为 amount。",
             "- op=none 表示本轮不变化，此时 amount 填 0。",
             "- amount 必须是非负数字（replace 时为目标数值），且不超过该条目的单轮最大变化。",
-            "- state 是更新后的条目状态，一句话以内，写清楚当前情况或最近一次变化的原因；"
-            "没有变化时可沿用原状态。",
+            (
+                "- state 是更新后的条目状态，一句话以内，写清楚当前情况或最近一次变化的原因；"
+                "没有变化时可沿用原状态。"
+            ),
             "- 依据必须来自回复内容与条目描述，不要凭空推测。",
             "",
             "只输出如下 JSON，不要输出任何解释或代码块标记：",
@@ -202,8 +206,8 @@ def parse_judge_result(
 
 
 async def run_judge(
-    service: "TriggerCounterService",
-    entries: list["EntrySection"],
+    service: TriggerCounterService,
+    entries: list[EntrySection],
     reply_text: str,
     tool_summary: str = "",
     stream_id: str = "",
@@ -231,7 +235,9 @@ async def run_judge(
         return []
 
     records = await service.load_records(stream_id)
-    prompt = build_judge_prompt(entries, records, reply_text, tool_summary, request_name)
+    prompt = build_judge_prompt(
+        entries, records, reply_text, tool_summary, request_name
+    )
 
     request = llm_api.create_llm_request(
         model_set=model_set,

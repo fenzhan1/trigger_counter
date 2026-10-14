@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from plugins.trigger_counter.config import EntrySection, TriggerCounterConfig
 from plugins.trigger_counter.event_handler import TriggerCounterInjectHandler
 from plugins.trigger_counter.judge import build_judge_prompt, parse_judge_result
@@ -107,10 +106,16 @@ def test_judge_prompt_and_parse() -> None:
     assert "对方友善时增加" in prompt
 
     updates = parse_judge_result(
-        {"entries": [{"name": "好感度", "op": "increase", "amount": 1, "state": "更开心"}]},
+        {
+            "entries": [
+                {"name": "好感度", "op": "increase", "amount": 1, "state": "更开心"}
+            ]
+        },
         valid_names={"好感度"},
     )
-    assert updates == [{"name": "好感度", "op": "increase", "amount": 1.0, "state": "更开心"}]
+    assert updates == [
+        {"name": "好感度", "op": "increase", "amount": 1.0, "state": "更开心"}
+    ]
 
     updates = parse_judge_result(
         {"entries": [{"name": "不存在", "op": "increase", "amount": 1, "state": ""}]},
@@ -171,12 +176,26 @@ async def test_inject_handler_filters_listen_target(
 
     written: list[tuple[str, str, str]] = []
 
-    def fake_add(stream_id: str, bucket: str, name: str, content: str, insert_type: Any, consume: Any) -> None:
+    def fake_add(
+        stream_id: str,
+        bucket: str,
+        name: str,
+        content: str,
+        insert_type: Any,
+        consume: Any,
+    ) -> None:
         written.append((stream_id, name, content))
 
-    monkeypatch.setattr("plugins.trigger_counter.event_handler.get_stream_info", fake_stream_info)
-    monkeypatch.setattr("plugins.trigger_counter.event_handler.add_stream_reminder", fake_add)
-    monkeypatch.setattr("plugins.trigger_counter.event_handler.delete_stream_reminder", lambda *a, **kw: None)
+    monkeypatch.setattr(
+        "plugins.trigger_counter.event_handler.get_stream_info", fake_stream_info
+    )
+    monkeypatch.setattr(
+        "plugins.trigger_counter.event_handler.add_stream_reminder", fake_add
+    )
+    monkeypatch.setattr(
+        "plugins.trigger_counter.event_handler.delete_stream_reminder",
+        lambda *a, **kw: None,
+    )
 
     handler = TriggerCounterInjectHandler(plugin)
     await handler.execute("on_prompt_build", {"values": {"stream_id": "s1"}})

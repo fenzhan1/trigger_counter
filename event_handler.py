@@ -14,7 +14,10 @@ from typing import Any
 
 from src.app.plugin_system.api.event_api import EventDecision
 from src.app.plugin_system.api.log_api import get_logger
-from src.app.plugin_system.api.prompt_api import add_stream_reminder, delete_stream_reminder
+from src.app.plugin_system.api.prompt_api import (
+    add_stream_reminder,
+    delete_stream_reminder,
+)
 from src.app.plugin_system.api.stream_api import get_stream_info
 from src.app.plugin_system.base import BaseEventHandler
 from src.app.plugin_system.types import SystemReminderBucket
@@ -89,11 +92,15 @@ async def _matched_entries(
     try:
         stream_meta = await get_stream_info(stream_id)
     except Exception as exc:
-        logger.error(f"trigger_counter: 查询 stream_info 失败 stream_id={stream_id!r}: {exc}")
+        logger.error(
+            f"trigger_counter: 查询 stream_info 失败 stream_id={stream_id!r}: {exc}"
+        )
         return []
 
     if stream_meta is None:
-        logger.debug(f"trigger_counter: 无法获取 stream_info，跳过 stream_id={stream_id!r}")
+        logger.debug(
+            f"trigger_counter: 无法获取 stream_info，跳过 stream_id={stream_id!r}"
+        )
         return []
 
     matched = [entry for entry in entries if entry_matches(entry, stream_meta)]
@@ -308,6 +315,8 @@ class TriggerCounterReviewHandler(BaseEventHandler):
             entries = [entry for entry in matched if entry.review_after_reply]
             if not entries:
                 return
-            await run_judge(service, entries, reply_text, tool_summary, stream_id, request_name)
+            await run_judge(
+                service, entries, reply_text, tool_summary, stream_id, request_name
+            )
         except Exception as exc:
             logger.warning(f"trigger_counter: 条目判定失败: {exc}")

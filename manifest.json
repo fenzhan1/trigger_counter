@@ -1,13 +1,12 @@
 {
     "name": "trigger_counter",
     "display_name": "条目注入与值追踪",
-    "version": "1.2.0",
+    "version": "1.2.2",
     "description": "自定义条目注入插件，支持启用开关、白名单/黑名单、注入位置、每条目独立监听目标，并在回复结束后由判定模型更新条目的值与状态。",
     "author": "MoFox Team",
     "license": "AGPL-3.0",
     "categories": [
-        "prompt",
-        "utility"
+        "tool"
     ],
     "tags": [
         "prompt",
@@ -50,6 +49,6 @@
         "prompt_api": "1.0.0",
         "send_api": "1.0.0",
         "storage_api": "1.0.0",
-        "stream_api": "1.0.0"
+        "stream_api": "2.0.0"
     }
 }

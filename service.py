@@ -75,7 +75,7 @@ def format_value(value: float) -> str:
         格式化后的字符串。
     """
     if abs(value - round(value)) < 1e-9:
-        return str(int(round(value)))
+        return str(round(value))
     return f"{value:.2f}".rstrip("0").rstrip(".")
 
 
@@ -84,7 +84,7 @@ class TriggerCounterService(BaseService):
 
     name: str = "trigger_counter"
     description: str = "维护自定义条目的值与条目状态，并构建注入提示词的说明块"
-    version: str = "1.2.0"
+    version: str = "1.2.1"
 
     # ------------------------------------------------------------------
     # 配置与条目
@@ -174,10 +174,14 @@ class TriggerCounterService(BaseService):
 
     async def _flush(self) -> None:
         """把记录缓存写回磁盘（调用方需持有锁）。"""
-        await storage_api.save_json(_STORE_NAME, _RECORD_KEY, {
-            scope: {name: dict(record) for name, record in entries.items()}
-            for scope, entries in _CACHE.items()
-        })
+        await storage_api.save_json(
+            _STORE_NAME,
+            _RECORD_KEY,
+            {
+                scope: {name: dict(record) for name, record in entries.items()}
+                for scope, entries in _CACHE.items()
+            },
+        )
 
     async def load_records(self, stream_id: str = "") -> dict[str, dict[str, Any]]:
         """加载当前作用域下所有启用条目的值与状态，为新条目补齐初始数据。

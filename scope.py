@@ -51,7 +51,7 @@ def scope_matches(spec: str, chat_type: str, chat_id: str, platform: str = "") -
     return False
 
 
-def entry_matches(entry: "EntrySection", stream_info: dict[str, Any]) -> bool:
+def entry_matches(entry: EntrySection, stream_info: dict[str, Any]) -> bool:
     """判断条目的白名单 / 黑名单是否对当前聊天流生效。
 
     规则：
@@ -87,20 +87,22 @@ def entry_matches(entry: "EntrySection", stream_info: dict[str, Any]) -> bool:
     return True
 
 
-def entry_listens_to(entry: "EntrySection", request_name: str, default_target: str) -> bool:
+def entry_listens_to(
+    entry: EntrySection, request_name: str, default_target: str
+) -> bool:
     """判断条目的监听目标是否匹配当前 LLM 请求。
 
-条目 ``listen_target`` 留空时跟随全局默认目标；填写后只匹配指定
-``request_name``（after_llm_request 事件中的 request_name）。
+    条目 ``listen_target`` 留空时跟随全局默认目标；填写后只匹配指定
+    ``request_name``（after_llm_request 事件中的 request_name）。
 
-Args:
-    entry: 条目配置。
-    request_name: 当前请求名。
-    default_target: 全局默认监听目标。
+    Args:
+        entry: 条目配置。
+        request_name: 当前请求名。
+        default_target: 全局默认监听目标。
 
-Returns:
-    该条目是否监听当前请求。
-"""
+    Returns:
+        该条目是否监听当前请求。
+    """
     target = (entry.listen_target or "").strip()
     if not target:
         target = (default_target or "").strip()

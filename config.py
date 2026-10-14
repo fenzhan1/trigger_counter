@@ -62,8 +62,7 @@ class EntrySection(SectionBase):
     exclude: list[str] = Field(
         default_factory=list,
         description=(
-            "黑名单，命中则排除，格式同 include。\n"
-            '示例：exclude = ["group:123456"]'
+            '黑名单，命中则排除，格式同 include。\n示例：exclude = ["group:123456"]'
         ),
     )
 

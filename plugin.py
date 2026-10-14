@@ -34,9 +34,9 @@ class TriggerCounterPlugin(BasePlugin):
         "自定义条目注入插件：支持启用开关、白名单 / 黑名单、注入位置、"
         "每条目独立监听目标，并在回复结束后由判定模型更新条目的值与状态"
     )
-    plugin_version: str = "1.2.0"
+    plugin_version: str = "1.2.2"
 
-    configs: list[type] = [TriggerCounterConfig]
+    configs = [TriggerCounterConfig]
 
     def get_components(self) -> list[type]:
         """返回插件包含的组件。

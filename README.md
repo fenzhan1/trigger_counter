@@ -4,13 +4,13 @@
 
 ## 安装
 
-将 `trigger_counter-1.2.0.mfp` 放入机器人的 `plugins/` 目录，然后执行 `/reload trigger_counter`，或把 `trigger_counter/` 源码目录放入 `plugins/` 后重启。
+将 `trigger_counter-1.2.1.mfp` 放入机器人的 `plugins/` 目录，然后执行 `/reload trigger_counter`，或把 `trigger_counter/` 源码目录放入 `plugins/` 后重启。
 
 ## 目录说明
 
-- `trigger_counter/`：插件源码（与 plugins/ 目录布局一致）
+- 根目录：插件源码（与 plugins/ 目录布局一致）
 - `test/`：插件核心逻辑测试
-- `trigger_counter-1.2.0.mfp` / `.zip`：发布包（内容相同，任选其一）
+- `trigger_counter-1.2.1.mfp` / `.zip`：发布包（内容相同，任选其一）
 
 ## 配置
 

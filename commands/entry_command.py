@@ -60,6 +60,10 @@ class EntryCommand(BaseCommand):
         """
         await send_text(text, stream_id=self.stream_id)
 
+    async def execute(self, message_text: str) -> tuple[bool, str]:
+        """执行命令（委托基类完成路由分发）。"""
+        return await super().execute(message_text)
+
     @cmd_route()
     async def handle_list(self) -> tuple[bool, str]:
         """列出所有启用条目的当前值与状态。"""
@@ -80,15 +84,16 @@ class EntryCommand(BaseCommand):
             target = (entry.listen_target or "").strip() or default_target
             target_text = target or "全局默认"
             lines.append(
-                f"- {entry_name}：值 {value} ｜ 状态 {state} ｜ "
-                f"监听 {target_text}"
+                f"- {entry_name}：值 {value} ｜ 状态 {state} ｜ 监听 {target_text}"
             )
 
         await self._reply("\n".join(lines))
         return True, "listed"
 
     @cmd_route("调整")
-    async def handle_adjust(self, entry_name: str = "", delta: float = 0.0) -> tuple[bool, str]:
+    async def handle_adjust(
+        self, entry_name: str = "", delta: float = 0.0
+    ) -> tuple[bool, str]:
         """手动调整某个条目的值。
 
         Args:
@@ -109,7 +114,9 @@ class EntryCommand(BaseCommand):
         return True, "adjusted"
 
     @cmd_route("状态")
-    async def handle_set_state(self, entry_name: str = "", state: str = "") -> tuple[bool, str]:
+    async def handle_set_state(
+        self, entry_name: str = "", state: str = ""
+    ) -> tuple[bool, str]:
         """手动设置某个条目的状态文本。
 
         Args:
